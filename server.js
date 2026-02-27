@@ -1,8 +1,8 @@
-const express = require('express');
-const app = express();
+const app = require("./src/app");
 
-app.get('/', (req, res) => {
-    res.send('Hello World');
+
+// const port = 3000;
+app.listen(3000, () => {
+    console.log('start the server'); 
 })
 
-app.listen(3000);
