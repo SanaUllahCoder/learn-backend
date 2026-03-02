@@ -1,50 +1,44 @@
-const express = require('express')
-
+const express = require("express");
+const model = require("./model/note.model");
 const app = express();
+app.use(express.json());
 
-const notes = [];
+app.post("/notes", async (req, res) => {
 
-app.use(express.json())
+    const data = req.body;
+    await model.create({
+        name: data.name,
+        email: data.email,
+    })
+    res.status(201).json({ message: "Note created successfully" });
+});
 
-// Create api 
-// method post  and in the method data send
-app.post('/notes', (req, res) => {
-    notes.push(req.body);
-    // console.log(req.body);
+app.get("/notes", async (req, res) => {
+    
+    const notes = await model.find();
     res.status(201).json({
-        msg: "Notes fetched successfully"
+        msg: "Notes fetched Successfully",
+        notes : notes
     })
 });
 
-// GET METHOD  
-app.get('/notes', (req, res) => {
-    res.status(200).json({
-        msg: "Notes fetched successfully",
-        notes: notes
-    });
-});
-
-// DELETE METHOD 
-// app.delete('/notes/:index', (req, res) => {
-//     const index = req.params.index;
-//     delete notes[ index ];
-//     res.status(200).json({
-//         msg: "Notes deleted successfully"
-//     })
-
-// });
-
-// PATH METHOD 
-app.patch('/notes/:index', (req, res) => {
-
-    const index = req.params.index;
-    const names = req.body.name;
-    notes[ index ].name = names;
-
-    res.status(200).json({
-        msg: "Notes updated successfully"
+app.delete('/notes/:id', async (req, res) =>{
+    const id =  req.params.id;
+    await model.findByIdAndDelete({
+        _id : id
     })
+    res.status(200).json({
+        msg : "notes deleted Successfully"
+    })
+})
 
+app.patch('/notes/:id', async (req, res) =>{
+    const id =  req.params.id;
+    const email = req.body.email;
+    await model.findByIdAndUpdate({ _id : id }, {email : email})
+    res.status(200).json({
+        msg : "notes updated Successfully"
+    })
 })
 
 module.exports = app;
