@@ -1,17 +1,26 @@
 const mongoose = require('mongoose');
 
-const schema = new mongoose.Schema({
-   
-        username: String, 
-        password : String,
-        email: {
-            type :String,
-            unique: true
-        }
-        
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,  
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role:{
+        type: String,
+        enum: ['user', 'artist'],
+        default: 'user'
+    }
 });
-const Note = mongoose.model('Credential_Data', schema);
 
-console.log(Note);
-
-module.exports = Note;
+const User = mongoose.model('spotify', userSchema);
+module.exports = User;

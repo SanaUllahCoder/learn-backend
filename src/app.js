@@ -1,13 +1,16 @@
 const express = require('express');
-const authRouters = require('./routers/auth.route');
-const cookieParser = require('cookie-parser');
-const postRouter = require("./routers/post.route")
+// const jsonwebtoken = require('jsonwebtoken');
+const cookie = require('cookie-parser');
+const authRoutes = require('./routes/auth.routes');
+const musicRoutes = require('./routes/musicArtist.routes');
+
+
 const app = express();
 
 app.use(express.json());
-app.use(cookieParser());
-app.use("/api/post", postRouter);  
-app.use("/api/auth", authRouters);
+app.use(cookie());
+app.use('/api/auth', authRoutes);
+app.use('/api/musicArtist', musicRoutes)
 
 
 module.exports = app;
