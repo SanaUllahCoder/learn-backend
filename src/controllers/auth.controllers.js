@@ -1,4 +1,4 @@
-const routers = require('../routers/auth.route');
+const routers = require('../routes/auth.route');
 
 const jwt = require('jsonwebtoken');
 const Note = require('../models/user.model');

@@ -10,6 +10,7 @@ const schema = new mongoose.Schema({
         }
         
 });
+
 const Note = mongoose.model('Credential_Data', schema);
 
 console.log(Note);
