@@ -1,20 +1,19 @@
-const {ImageKit} = require("@imagekit/nodejs");
-require('dotenv').config();
-const imageKit = new ImageKit({
-    
-    privateKey: process.env.IMAGEKIT_PUBLIC_KEY,
-   
-});
+const { ImageKit } = require("@imagekit/nodejs")
+
+
+const ImageKitClient = new ImageKit({
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+})
 
 async function uploadFile(file) {
-
-    const result = await imageKit.files.upload({
+    const result = await ImageKitClient.files.upload({
         file,
-        fileName: "file.jpg",
-        folder:"artist/muscicArtist"
-    });
-    return result
-    console.log(result);
+        fileName: "music_" + Date.now(),
+        folder: "yt-complete-backend/music"
+    })
+
+    return result;
 }
+
 
 module.exports = { uploadFile }
