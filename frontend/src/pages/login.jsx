@@ -4,7 +4,7 @@ import { useState } from "react";
 // If VITE_API_BASE_URL is unset, we fall back to a relative path so Vite's proxy can work.
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
-export default function Login() {
+export default function Login({ onNavigate, onLoginSuccess }) {
   const [form, setForm] = useState({ identifier: "", password: "" });
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
@@ -43,6 +43,22 @@ export default function Login() {
 
       setStatus(data?.message || "Logged in successfully");
       setForm({ identifier: "", password: "" });
+
+      const roleFromResponse = data?.user?.role;
+      const roleFromRegister = localStorage.getItem("registeredRole");
+      const role = roleFromResponse || roleFromRegister || "user";
+      if (roleFromRegister) {
+        localStorage.removeItem("registeredRole");
+      }
+
+      if (typeof onLoginSuccess === "function") {
+        onLoginSuccess(role);
+      }
+
+      if (onNavigate) {
+        const nextPage = role === "artist" ? "uploadMusic" : "music";
+        setTimeout(() => onNavigate(nextPage), 800);
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {

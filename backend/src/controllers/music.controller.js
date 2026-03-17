@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const musicModel = require('../models/music.model');
 const { uploadFile } = require('../services/storage.service');
 const albumModel = require('../models/album.model');
@@ -5,11 +7,14 @@ const jwt = require('jsonwebtoken');
 
 
 async function createMusic(req, res) {
-    const token = req.cookies.token;
-
     const { title } = req.body;
     const file = req.file;
-    const result = await uploadFile(file.buffer.toString('base64'));
+    const filePath = file.path;
+
+    const result = await uploadFile(filePath, file.originalname);
+    fs.unlink(filePath, (err) => {
+      if (err) console.warn('temp file removal failed', err);
+    });
     const music = await musicModel.create({
         uri: result.url,
         title,

@@ -1,14 +1,15 @@
+const fs = require('fs');
 const { ImageKit } = require("@imagekit/nodejs")
-
 
 const ImageKitClient = new ImageKit({
     privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
 })
 
-async function uploadFile(file) {
+async function uploadFile(filePath, fileName) {
+    const stream = fs.createReadStream(filePath);
     const result = await ImageKitClient.files.upload({
-        file,
-        fileName: "music_" + Date.now(),
+        file: stream,
+        fileName: fileName || "music_" + Date.now(),
         folder: "yt-complete-backend/music"
     })
 

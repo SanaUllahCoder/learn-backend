@@ -4,7 +4,7 @@
 // If VITE_API_BASE_URL is unset, we fall back to a relative path so Vite's proxy can work.
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
-export default function Register() {
+export default function Register({ onNavigate }) {
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -37,7 +37,11 @@ export default function Register() {
         throw new Error(data?.message || "Registration failed");
       }
       setStatus(data?.message || "Registered successfully");
+      localStorage.setItem("registeredRole", form.role);
       setForm({ username: "", email: "", password: "", role: "user" });
+      if (onNavigate) {
+        setTimeout(() => onNavigate("login"), 1200);
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {

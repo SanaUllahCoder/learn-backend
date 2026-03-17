@@ -1,9 +1,16 @@
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const musicController = require('../controllers/music.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
 const multer = require('multer');
 
-const upload = multer({ storage: multer.memoryStorage() });
+const uploadDir = path.join(__dirname, '../../tmp/uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+const upload = multer({ dest: uploadDir });
 
 const router = express.Router();
 
